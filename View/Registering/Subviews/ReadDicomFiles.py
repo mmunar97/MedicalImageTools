@@ -1,13 +1,13 @@
 import tkinter as tk
 
-from Controller.ListenerCode import ListenerCode
-from Model.DicomSelectedFile import DicomSelectedFile
+from Controller.Registering.RegisteringListenerCode import RegisteringListenerCode
+from Model.Base.SelectedFile import SelectedFile
 from tkinter import filedialog
 from tkinter import messagebox
 from typing import Callable
-from View.ViewBuilder.Base import Base
-from View.ViewBuilder.Values.Font import Font
-from View.ViewBuilder.Values.Color import Color
+from View.Utils.Base import Base
+from View.Utils.Values.Font import Font
+from View.Utils.Values.Color import Color
 
 
 class ReadDicomFiles(object):
@@ -17,8 +17,8 @@ class ReadDicomFiles(object):
         self.__root_window = window
         self.__listener = listener
 
-        self.__first_image_file: DicomSelectedFile = None
-        self.__second_image_file: DicomSelectedFile = None
+        self.__first_image_file: SelectedFile = None
+        self.__second_image_file: SelectedFile = None
 
         self.__title_label = Base.create_text_view(self.__root_window,
                                                    text="Select two DICOM files. Only DICOM files or folders are allowed.",
@@ -27,7 +27,7 @@ class ReadDicomFiles(object):
                                                    position=(20, 20))
 
         self.__first_image_title_label = Base.create_text_view(self.__root_window,
-                                                               text="FIRST IMAGE",
+                                                               text="FIRST IMAGE (fixed)",
                                                                background_color=Color.CLEAR_BACKGROUND,
                                                                font=Font.BOLD,
                                                                position=(20, 60))
@@ -43,7 +43,7 @@ class ReadDicomFiles(object):
                                                                        self.__load_first_image_folder_button))
 
         self.__second_image_title_label = Base.create_text_view(self.__root_window,
-                                                                text="SECOND IMAGE",
+                                                                text="SECOND IMAGE (moving)",
                                                                 background_color=Color.CLEAR_BACKGROUND,
                                                                 font=Font.BOLD,
                                                                 position=(20, 140))
@@ -76,9 +76,9 @@ class ReadDicomFiles(object):
 
         if file_path != "" or file_path is not None:
             if button is self.__load_first_image_file_button:
-                self.__first_image_file = DicomSelectedFile(True, file_path)
+                self.__first_image_file = SelectedFile(True, file_path)
             elif button is self.__load_second_image_file_button:
-                self.__second_image_file = DicomSelectedFile(True, file_path)
+                self.__second_image_file = SelectedFile(True, file_path)
 
     def read_dicom_folder(self, button):
         """
@@ -92,9 +92,9 @@ class ReadDicomFiles(object):
 
         if folder_path != "" or folder_path is not None:
             if button is self.__load_first_image_folder_button:
-                self.__first_image_file = DicomSelectedFile(False, folder_path)
+                self.__first_image_file = SelectedFile(False, folder_path)
             elif button is self.__load_second_image_folder_button:
-                self.__second_image_file = DicomSelectedFile(False, folder_path)
+                self.__second_image_file = SelectedFile(False, folder_path)
 
     def start_reading_files(self):
         """
@@ -103,7 +103,7 @@ class ReadDicomFiles(object):
         if self.__first_image_file is None or self.__second_image_file is None:
             messagebox.showerror("Error while reading", "Some image has not been selected. Please, try again.")
         else:
-            self.__listener(ListenerCode.SELECTED_IMAGES,
+            self.__listener(RegisteringListenerCode.SELECTED_IMAGES,
                             first_image=self.__first_image_file,
                             second_image=self.__second_image_file)
             self.__root_window.destroy()

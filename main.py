@@ -1,4 +1,4 @@
-from Controller.MedicalImageTools import MedicalImageTools
+from Controller.GlobalController import GlobalController
 
 if __name__ == '__main__':
-    MedicalImageTools()
+    GlobalController()

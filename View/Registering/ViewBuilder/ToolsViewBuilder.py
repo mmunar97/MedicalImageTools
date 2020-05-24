@@ -1,8 +1,8 @@
 import tkinter as tk
 from typing import Callable, Tuple
 
-from View.ViewBuilder.Base import Base
-from View.ViewBuilder.Values.Color import Color
+from View.Utils.Base import Base
+from View.Utils.Values.Color import Color
 
 
 def create_radio_button_group_slices(parent_view: tk.BaseWidget,

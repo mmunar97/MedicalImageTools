@@ -3,8 +3,8 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from typing import Any, Callable, Tuple
 
-from View.ViewBuilder.Values.Color import Color
-from View.ViewBuilder.Values.Font import Font
+from View.Utils.Values.Color import Color
+from View.Utils.Values.Font import Font
 
 
 def create_image_from_path(path: str, shape=None) -> ImageTk.PhotoImage:
@@ -209,3 +209,47 @@ def create_slider(parent_view: tk.BaseWidget, range: Tuple[int, int], orientatio
     else:
         slider.configure(state='disabled')
     return slider
+
+
+def create_separator(parent_view: tk.BaseWidget, background_color: Color,
+                     position: Tuple[int, int], size: Tuple[int, int]) -> tk.Frame:
+    """
+    Creates a separator.
+
+    Args:
+        parent_view: A Tk object, representing the root view.
+        background_color: A Color object, representing the solid background color.
+        position: A Tuple of integers, representing the coordinates of the container.
+        size: A Tuple of integers, representing the shape of the view (width x height).
+
+    Returns:
+        A Frame object.
+    """
+    separator = tk.Frame(parent_view,
+                         bg=background_color.value,
+                         width=size[0],
+                         height=size[1])
+    separator.pack()
+    separator.place(x=position[0], y=position[1])
+
+    return separator
+
+
+def create_edit_text(parent_view: tk.BaseWidget, position: Tuple[int, int], size: Tuple[int, int]) -> tk.Entry:
+    """
+    Creates a text for input.
+
+    Args:
+        parent_view: A Tk object, representing the root view.
+        position: A Tuple of integers, representing the coordinates of the container.
+        size: A Tuple of integers, representing the shape of the view (width x height).
+
+    Returns:
+        A Entry object.
+    """
+    entry = tk.Entry(parent_view)
+    entry.pack()
+
+    entry.place(x=position[0], y=position[1], width=size[0], height=size[1])
+
+    return entry
