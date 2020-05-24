@@ -115,14 +115,18 @@ class RegisteringModel(threading.Thread):
         """
         learning_rate = kwargs['learning_rate']
         number_iterations = kwargs['number_iterations']
-        number_bins = kwargs['number_bins']
+        similarity_function = kwargs['similarity_function']
 
         img1 = itk.GetImageFromArray(self.__first_image_file.image_tensor.astype(numpy.float32))
         img2 = itk.GetImageFromArray(self.__second_image_file.image_tensor.astype(numpy.float32))
 
         registration_method = itk.ImageRegistrationMethod()
 
-        registration_method.SetMetricAsMattesMutualInformation(numberOfHistogramBins=number_bins)
+        if similarity_function == 0:
+            registration_method.SetMetricAsCorrelation()
+        elif similarity_function == 1:
+            registration_method.SetMetricAsMeanSquares()
+
         registration_method.SetMetricSamplingStrategy(registration_method.RANDOM)
         registration_method.SetMetricSamplingPercentage(0.01)
 

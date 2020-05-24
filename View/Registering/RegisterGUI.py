@@ -178,29 +178,22 @@ class RegisterView(object):
         self.__similarity_control_label = Base.create_text_view(
             parent_view=self.__root_view,
             background_color=Color.TOOLS_PANEL_BACKGROUND,
-            text="SIMILARITY FUNCTION (Mutual information)",
+            text="SIMILARITY FUNCTION",
             font=Font.REGULAR,
             position=(780, 380)
         )
 
-        self.__similarity_number_bins_label = Base.create_text_view(
+        self.__similarity_function = Base.create_integer_variable()
+        self.__similarity_correlation_radio_button, self.__similarity_mean_squares_radio_button = ToolsViewBuilder.create_similarity_function_radio_button_group(
             parent_view=self.__root_view,
-            background_color=Color.TOOLS_PANEL_BACKGROUND,
-            text="Number bins",
-            font=Font.REGULAR,
-            position=(790, 410)
-        )
-
-        self.__similarity_number_bins_entry = Base.create_edit_text(
-            parent_view=self.__root_view,
-            position=(940, 410),
-            size=(110, 20)
+            variable=self.__similarity_function,
+            command=None
         )
 
         self.__compute_registration_button = Base.create_button(
             parent_view=self.__root_view,
             text="Compute registration",
-            position=(870, 450),
+            position=(870, 490),
             command=self.start_registration
         )
 
@@ -295,16 +288,14 @@ class RegisterView(object):
         Starts the registering process.
         """
 
-        learning_rate = float(self.__optimizer_parameters_learning_rate_entry.get())
-        number_iterations = int(self.__optimizer_parameters_iterations_entry.get())
-        number_bins = int(self.__similarity_number_bins_entry.get())
-
-        self.__listener(RegisteringListenerCode.REGISTERING_WILL_START,
-                        learning_rate=learning_rate,
-                        number_iterations=number_iterations,
-                        number_bins=number_bins)
         try:
-            pass
+            learning_rate = float(self.__optimizer_parameters_learning_rate_entry.get())
+            number_iterations = int(self.__optimizer_parameters_iterations_entry.get())
+
+            self.__listener(RegisteringListenerCode.REGISTERING_WILL_START,
+                            learning_rate=learning_rate,
+                            number_iterations=number_iterations,
+                            similarity_function=self.__similarity_function.get())
         except:
             messagebox.showerror("Error in parameters", "Some of the introduced parameters are not correct.")
 
